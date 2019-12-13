@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Order {
+public class Deal {
     @Id
     private String id;
     private String landlord_id;
