@@ -14,9 +14,8 @@ public class DealServiceImpl implements DealService {
     private DealRepository dealRepository;
 
     @Override
-    public Deal findById(String id) {
-        Optional<Deal> order = dealRepository.findById(id);
-        return order.orElse(null);
+    public List<Deal> findByIdLike(String param_id) {
+        return dealRepository.findByIdLike("%" + param_id + "%");
     }
 
     @Override
