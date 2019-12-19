@@ -12,6 +12,7 @@ public class User {
     private String telephone;
     private String permission_level;
     private boolean real_name_status;
+    private String account_status;
 
     public String getId() {
         return id;
@@ -53,5 +54,12 @@ public class User {
     }
     public void setReal_name_status(boolean real_name_status) {
         this.real_name_status = real_name_status;
+    }
+
+    public String getAccount_status() {
+        return account_status;
+    }
+    public void setAccount_status(String account_status) {
+        this.account_status = account_status;
     }
 }

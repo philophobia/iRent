@@ -7,13 +7,16 @@ import se.irent.service.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/v1/management")
 public class ManagementController {
-    private HttpSession session;
+    private String admin;
     @Resource
     private DealServiceImpl dealService;
     @Resource
@@ -29,12 +32,20 @@ public class ManagementController {
 
     //后台管理-登录和注销的api
     @RequestMapping(value = "/login")
-    public Administrator login(HttpServletRequest request, @RequestParam("id") String admin_id, @RequestParam("password") String pwd) {
-        session = request.getSession();
+    public Administrator login(@RequestParam("id") String admin_id, @RequestParam("password") String pwd) {
+        if (admin_id == null || pwd == null)
+            return null;
         Administrator cur_admin = adminService.findById(admin_id);
         if (pwd.equals(cur_admin.getPassword())) {
             cur_admin.setPassword("***");
-            session.setAttribute("operator", admin_id);
+            admin = admin_id;
+
+            Log this_log = new Log();
+            this_log.setAction("登入");
+            this_log.setOperator_id(admin_id);
+            SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            this_log.setTime(formatter.format(new Date()));
+            logService.addLog(this_log);
             return cur_admin;
         }
         else
@@ -43,7 +54,12 @@ public class ManagementController {
 
     @RequestMapping(value = "logout")
     public String logout(){
-        session.invalidate();
+        Log this_log = new Log();
+        this_log.setAction("登入");
+        this_log.setOperator_id(admin);
+        SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        this_log.setTime(formatter.format(new Date()));
+        logService.addLog(this_log);
         return "success";
     }
 
@@ -92,7 +108,7 @@ public class ManagementController {
     }
 
     //后台管理-举报部分的api
-    @GetMapping("/houses")
+    @GetMapping("/reports")
     public List<Report> getReport(@RequestParam(value = "id", required = false) String rid) {
         if (rid == null)
             return reportService.findAll();

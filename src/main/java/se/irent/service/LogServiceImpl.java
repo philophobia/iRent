@@ -24,6 +24,6 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public List<Log> findByIdLike(String param_id) {
-        return logRepository.findByIdLike(param_id);
+        return logRepository.findByIdLike("%" + param_id + "%");
     }
 }

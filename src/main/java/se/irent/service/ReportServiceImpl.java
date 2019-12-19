@@ -1,11 +1,13 @@
 package se.irent.service;
 
+import org.springframework.stereotype.Service;
 import se.irent.dao.ReportRepository;
 import se.irent.entity.Report;
 
 import javax.annotation.Resource;
 import java.util.List;
 
+@Service
 public class ReportServiceImpl implements ReportService {
     @Resource
     private ReportRepository reportRepository;

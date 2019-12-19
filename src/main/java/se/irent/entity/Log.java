@@ -1,22 +1,24 @@
 package se.irent.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class Log {
     @Id
-    private String id;
+    @GeneratedValue
+    private int id;
     private String operator_id;
     private String action;
     private String target_kind;
     private String target_id;
     private String time;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
