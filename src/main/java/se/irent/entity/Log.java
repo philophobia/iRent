@@ -3,6 +3,7 @@ package se.irent.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 public class Log {
@@ -13,7 +14,7 @@ public class Log {
     private String action;
     private String target_kind;
     private String target_id;
-    private String time;
+    private Date time;
 
     public int getId() {
         return id;
@@ -50,10 +51,10 @@ public class Log {
         this.target_id = target_id;
     }
 
-    public String getTime() {
+    public Date getTime() {
         return time;
     }
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 }

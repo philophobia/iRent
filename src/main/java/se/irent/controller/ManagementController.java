@@ -1,5 +1,6 @@
 package se.irent.controller;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import se.irent.entity.*;
 import se.irent.service.*;
@@ -7,6 +8,7 @@ import se.irent.service.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/management")
 public class ManagementController {
-    private String admin;
     @Resource
     private DealServiceImpl dealService;
     @Resource
@@ -32,49 +33,52 @@ public class ManagementController {
 
     //后台管理-登录和注销的api
     @RequestMapping(value = "/login")
-    public Administrator login(@RequestParam("id") String admin_id, @RequestParam("password") String pwd) {
+    public Administrator login(@RequestParam("id") String admin_id, @RequestParam("password") String pwd, HttpSession httpSession) throws ParseException {
         if (admin_id == null || pwd == null)
             return null;
         Administrator cur_admin = adminService.findById(admin_id);
+        Administrator re = new Administrator();
         if (pwd.equals(cur_admin.getPassword())) {
-            cur_admin.setPassword("***");
-            admin = admin_id;
+            re.setId(cur_admin.getPassword());
+            re.setPassword("***");
+            httpSession.setAttribute("operator", admin_id);
+            httpSession.setMaxInactiveInterval(900);
 
             Log this_log = new Log();
             this_log.setAction("登入");
             this_log.setOperator_id(admin_id);
             SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            this_log.setTime(formatter.format(new Date()));
+            Date time = formatter.parse(formatter.format(new Date()));
+            this_log.setTime(time);
             logService.addLog(this_log);
-            return cur_admin;
+            return re;
         }
         else
             return null;
     }
 
     @RequestMapping(value = "logout")
-    public String logout(){
+    public String logout(HttpServletRequest httpRequest) throws ParseException {
+        HttpSession httpSession = httpRequest.getSession();
         Log this_log = new Log();
-        this_log.setAction("登入");
-        this_log.setOperator_id(admin);
+        this_log.setAction("登出");
+        String admin_id = (String) httpSession.getAttribute("operator");
+        this_log.setOperator_id(admin_id);
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        this_log.setTime(formatter.format(new Date()));
+        Date time = formatter.parse(formatter.format(new Date()));
+        this_log.setTime(time);
         logService.addLog(this_log);
+        httpSession.invalidate();
         return "success";
     }
 
     //后台管理-交易部分的api
     @GetMapping("/deals")
-    public List<Deal> getOrder(@RequestParam(value = "id", required = false) String did){
+    public List<Deal> getDeal(@RequestParam(value = "id", required = false) String did){
         if (did == null)
             return dealService.findAll();
         else
             return dealService.findByIdLike(did);
-    }
-
-    @DeleteMapping("/deals")
-    public void deleteOneOrder(@RequestParam("id") String order_id){
-        dealService.deleteById(order_id);
     }
 
     //后台管理-用户部分的api
@@ -87,9 +91,52 @@ public class ManagementController {
     }
 
     @DeleteMapping("/users")
-    public String deleteOneUser(@RequestParam("id") String user_id){
+    public String deleteOneUser(@RequestParam("id") String user_id, HttpServletRequest httpRequest) throws ParseException {
         userService.deleteById(user_id);
+
+        HttpSession httpSession = httpRequest.getSession();
+        Log this_log = new Log();
+        this_log.setAction("删除");
+        String admin_id = (String) httpSession.getAttribute("operator");
+        this_log.setOperator_id(admin_id);
+        this_log.setTarget_kind("用户");
+        this_log.setTarget_id(user_id);
+        SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date time = formatter.parse(formatter.format(new Date()));
+        this_log.setTime(time);
+        logService.addLog(this_log);
         return "succeeded";
+    }
+
+    @PutMapping("/users")
+    public User putOneUser(@RequestParam("id") String uid, @RequestParam("operation") String op, HttpServletRequest httpRequest) throws ParseException {
+        User cur_user = userService.findById(uid);
+        if (cur_user == null)
+            return null;
+        String p = "";
+        if (op.equals("freeze")) {
+            op = "冻结";
+            p = "封禁";
+        }
+        else if (op.equals("recover")) {
+            op = "正常";
+            p = "恢复";
+        }
+        cur_user.setAccount_status(op);
+        cur_user = userService.update(cur_user);
+
+        HttpSession httpSession = httpRequest.getSession();
+        Log this_log = new Log();
+        this_log.setAction(p);
+        String admin_id = (String) httpSession.getAttribute("operator");
+        this_log.setOperator_id(admin_id);
+        this_log.setTarget_kind("用户");
+        this_log.setTarget_id(uid);
+        SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date time = formatter.parse(formatter.format(new Date()));
+        this_log.setTime(time);
+        logService.addLog(this_log);
+        return cur_user;
     }
 
     //后台管理-房源部分的api
@@ -102,25 +149,79 @@ public class ManagementController {
     }
 
     @DeleteMapping("/houses")
-    public String deleteHouse(@RequestParam("id") String hid) {
+    public String deleteHouse(@RequestParam("id") String hid, HttpServletRequest httpRequest) throws ParseException {
         houseService.deleteById(hid);
+
+        HttpSession httpSession = httpRequest.getSession();
+        Log this_log = new Log();
+        this_log.setAction("删除");
+        String admin_id = (String) httpSession.getAttribute("operator");
+        this_log.setOperator_id(admin_id);
+        this_log.setTarget_kind("房源");
+        this_log.setTarget_id(hid);
+        SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date time = formatter.parse(formatter.format(new Date()));
+        this_log.setTime(time);
+        logService.addLog(this_log);
         return "success";
     }
 
     //后台管理-举报部分的api
     @GetMapping("/reports")
-    public List<Report> getReport(@RequestParam(value = "id", required = false) String rid) {
+    public List<Report> getReport(@RequestParam(value = "id", required = false) String rid, @RequestParam(value = "status", required = false) String stat) {
         if (rid == null)
-            return reportService.findAll();
+            if (stat == null)
+                return reportService.findAll();
+            else
+                return reportService.findByStatus(stat);
         else
             return reportService.findByIdLike(rid);
     }
 
+    @PutMapping("/reports")
+    public Report updateReport(@RequestParam("id") String rid, @RequestParam("status") String stat, HttpServletRequest httpRequest) throws ParseException {
+        Report cur_report = reportService.findById(rid);
+        if (cur_report == null)
+            return null;
+        switch (stat) {
+            case "pending":
+                stat = "待处理";
+                break;
+            case "processing":
+                stat = "正在处理";
+                break;
+            case "processed":
+                stat = "处理完成";
+                break;
+        }
+        cur_report.setStatus(stat);
+        cur_report = reportService.update(cur_report);
+
+        HttpSession httpSession = httpRequest.getSession();
+        Log this_log = new Log();
+        this_log.setAction("更改状态");
+        String admin_id = (String) httpSession.getAttribute("operator");
+        this_log.setOperator_id(admin_id);
+        this_log.setTarget_kind("举报信");
+        this_log.setTarget_id(rid);
+        SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date time = formatter.parse(formatter.format(new Date()));
+        this_log.setTime(time);
+        logService.addLog(this_log);
+        return cur_report;
+    }
+
     //后台管理-日志部分的api
     @GetMapping("/logs")
-    public List<Log> getLog(@RequestParam(value = "id", required = false) String lid) {
-        if (lid == null)
-            return logService.findAll();
+    public List<Log> getLog(@RequestParam(value = "id", required = false) String lid,
+                            @RequestParam(value = "start", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startTime,
+                            @RequestParam(value = "end", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endTime) {
+        if (lid == null) {
+            if (startTime == null && endTime == null)
+                return logService.findAll();
+            else
+                return logService.findByTimeRange(startTime, endTime);
+        }
         else
             return logService.findByIdLike(lid);
     }

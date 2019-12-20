@@ -7,5 +7,7 @@ import java.util.List;
 interface UserService {
     List<User> findByIdLike(String user_id);
     List<User> findAll();
+    User findById(String uid);
     void deleteById(String user_id);
+    User update(User user);
 }
