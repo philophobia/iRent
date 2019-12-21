@@ -19,17 +19,17 @@ import java.util.List;
 @RequestMapping("/v1/management")
 public class ManagementController {
     @Resource
-    private DealServiceImpl dealService;
+    private DealServiceImpl dealService = new DealServiceImpl();
     @Resource
-    private AdministratorServiceImpl adminService;
+    private AdministratorServiceImpl adminService = new AdministratorServiceImpl();
     @Resource
-    private UserServiceImpl userService;
+    private UserServiceImpl userService = new UserServiceImpl();
     @Resource
-    private HouseServiceImpl houseService;
+    private HouseServiceImpl houseService = new HouseServiceImpl();
     @Resource
-    private ReportServiceImpl reportService;
+    private ReportServiceImpl reportService = new ReportServiceImpl();
     @Resource
-    private LogServiceImpl logService;
+    private LogServiceImpl logService = new LogServiceImpl();
 
     //后台管理-登录和注销的api
     @RequestMapping(value = "/login")
@@ -172,8 +172,20 @@ public class ManagementController {
         if (rid == null)
             if (stat == null)
                 return reportService.findAll();
-            else
+            else {
+                switch (stat) {
+                    case "pending":
+                        stat = "待处理";
+                        break;
+                    case "processing":
+                        stat = "正在处理";
+                        break;
+                    case "processed":
+                        stat = "处理完成";
+                        break;
+                }
                 return reportService.findByStatus(stat);
+            }
         else
             return reportService.findByIdLike(rid);
     }
@@ -184,9 +196,6 @@ public class ManagementController {
         if (cur_report == null)
             return null;
         switch (stat) {
-            case "pending":
-                stat = "待处理";
-                break;
             case "processing":
                 stat = "正在处理";
                 break;
