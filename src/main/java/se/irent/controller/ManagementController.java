@@ -42,7 +42,7 @@ public class ManagementController {
             re.setId(cur_admin.getPassword());
             re.setPassword("***");
             httpSession.setAttribute("operator", admin_id);
-            httpSession.setMaxInactiveInterval(900);
+            //httpSession.setMaxInactiveInterval(900);
 
             Log this_log = new Log();
             this_log.setAction("登入");
@@ -57,7 +57,7 @@ public class ManagementController {
             return null;
     }
 
-    @RequestMapping(value = "logout")
+    @RequestMapping(value = "/logout")
     public String logout(HttpServletRequest httpRequest) throws ParseException {
         HttpSession httpSession = httpRequest.getSession();
         Log this_log = new Log();
@@ -92,8 +92,6 @@ public class ManagementController {
 
     @DeleteMapping("/users")
     public String deleteOneUser(@RequestParam("id") String user_id, HttpServletRequest httpRequest) throws ParseException {
-        userService.deleteById(user_id);
-
         HttpSession httpSession = httpRequest.getSession();
         Log this_log = new Log();
         this_log.setAction("删除");
@@ -104,8 +102,14 @@ public class ManagementController {
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time = formatter.parse(formatter.format(new Date()));
         this_log.setTime(time);
-        logService.addLog(this_log);
-        return "succeeded";
+
+        if (this_log.getOperator_id() != null) {
+            userService.deleteById(user_id);
+            logService.addLog(this_log);
+            return "succeeded";
+        }
+        else
+            return "failed";
     }
 
     @PutMapping("/users")
@@ -122,8 +126,6 @@ public class ManagementController {
             op = "正常";
             p = "恢复";
         }
-        cur_user.setAccount_status(op);
-        cur_user = userService.update(cur_user);
 
         HttpSession httpSession = httpRequest.getSession();
         Log this_log = new Log();
@@ -135,8 +137,16 @@ public class ManagementController {
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time = formatter.parse(formatter.format(new Date()));
         this_log.setTime(time);
-        logService.addLog(this_log);
-        return cur_user;
+
+        if (this_log.getOperator_id() != null) {
+            cur_user.setAccount_status(op);
+            cur_user = userService.update(cur_user);
+            logService.addLog(this_log);
+            return cur_user;
+        }
+        else {
+            return null;
+        }
     }
 
     //后台管理-房源部分的api
@@ -150,8 +160,6 @@ public class ManagementController {
 
     @DeleteMapping("/houses")
     public String deleteHouse(@RequestParam("id") String hid, HttpServletRequest httpRequest) throws ParseException {
-        houseService.deleteById(hid);
-
         HttpSession httpSession = httpRequest.getSession();
         Log this_log = new Log();
         this_log.setAction("删除");
@@ -162,8 +170,15 @@ public class ManagementController {
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time = formatter.parse(formatter.format(new Date()));
         this_log.setTime(time);
-        logService.addLog(this_log);
-        return "success";
+
+        if (this_log.getOperator_id() != null) {
+            houseService.deleteById(hid);
+            logService.addLog(this_log);
+            return "succeeded";
+        }
+        else {
+            return "failed";
+        }
     }
 
     //后台管理-举报部分的api
@@ -203,8 +218,6 @@ public class ManagementController {
                 stat = "处理完成";
                 break;
         }
-        cur_report.setStatus(stat);
-        cur_report = reportService.update(cur_report);
 
         HttpSession httpSession = httpRequest.getSession();
         Log this_log = new Log();
@@ -216,8 +229,16 @@ public class ManagementController {
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time = formatter.parse(formatter.format(new Date()));
         this_log.setTime(time);
-        logService.addLog(this_log);
-        return cur_report;
+
+        if (this_log.getOperator_id() != null) {
+            cur_report.setStatus(stat);
+            cur_report = reportService.update(cur_report);
+            logService.addLog(this_log);
+            return cur_report;
+        }
+        else {
+            return null;
+        }
     }
 
     //后台管理-日志部分的api
