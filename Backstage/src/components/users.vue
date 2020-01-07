@@ -99,10 +99,6 @@
           type: 'warning'
         }).then(() => {
           this.handleDelete(row);
-          this.$message({
-            type: 'success',
-            message: '删除成功'
-          });
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -118,8 +114,18 @@
         api.deleteUser(params)
           .then(response => {
             if (response && response.data) {
+              this.$message({
+                type: 'success',
+                message: '删除成功'
+              });
               this.loading = false;
               this.reload();
+            }
+            else {
+              this.$message({
+                type: 'error',
+                message: '删除失败'
+              });
             }
           }).catch(error => {
             console.log(error);

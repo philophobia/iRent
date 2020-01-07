@@ -67,9 +67,15 @@ public class ManagementController {
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time = formatter.parse(formatter.format(new Date()));
         this_log.setTime(time);
-        logService.addLog(this_log);
-        httpSession.invalidate();
-        return "success";
+
+        if (this_log.getOperator_id() != null) {
+            logService.addLog(this_log);
+            httpSession.invalidate();
+            return "succeeded";
+        }
+        else {
+            return null;
+        }
     }
 
     //后台管理-交易部分的api
@@ -108,8 +114,9 @@ public class ManagementController {
             logService.addLog(this_log);
             return "succeeded";
         }
-        else
-            return "failed";
+        else {
+            return null;
+        }
     }
 
     @PutMapping("/users")
@@ -177,7 +184,7 @@ public class ManagementController {
             return "succeeded";
         }
         else {
-            return "failed";
+            return null;
         }
     }
 

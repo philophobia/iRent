@@ -119,10 +119,10 @@ export default {
         },
         handleTimeout: function() {
             this.exit();
-            this.$confirm('会话超时, 请重新登录。', '提示', {
+            this.$alert('会话超时, 请重新登录。', '提示', {
                 confirmButtonText: '确定',
-                type: 'warning'
-            }).then(() => {});
+                callback: () => {}
+            });
         }
     }
 }
