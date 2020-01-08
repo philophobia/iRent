@@ -9,7 +9,7 @@
                     <el-input v-model="formLogin.account" placeholder="账号"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-input v-model="formLogin.password" placeholder="密码" type="password"></el-input>
+                    <el-input v-model="formLogin.password" placeholder="密码" type="password" @keyup.enter.native="verify"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="warning" @click="verify">登录</el-button>
@@ -61,6 +61,13 @@ export default {
     },
     methods: {
         verify() {
+            if (this.formLogin.account == '' || this.formLogin.password == '') {
+                this.$message({
+                    type: 'error',
+                    message: '账号或密码不完整'
+                })
+                return;
+            }
             let c_pwd = md5(this.formLogin.password);
             this.formLogin.password = c_pwd;
             api.enter(this.formLogin)
