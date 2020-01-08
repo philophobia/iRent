@@ -1,5 +1,9 @@
 package se.irent.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 import se.irent.entity.Log;
 import se.irent.entity.User;
@@ -16,6 +20,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@Api(tags = "用户类控制器", value = "后台系统用户类控制器")
 public class UserController {
     @Resource
     private UserServiceImpl userService = new UserServiceImpl();
@@ -23,7 +28,8 @@ public class UserController {
     private LogServiceImpl logService = new LogServiceImpl();
 
     @GetMapping("/v1/backstage/users")
-    public List<User> getUser(@RequestParam(value = "id", required = false) String uid) {
+    @ApiOperation(value = "获取用户信息", notes = "获取全部用户信息的列表；若有请求url有参数id则进行模糊搜索")
+    public List<User> getUser(@ApiParam(name = "id", value = "用户的部分或完整id", required = false) @RequestParam(value = "id", required = false) String uid) {
         if (uid == null)
             return userService.findAll();
         else
@@ -31,7 +37,8 @@ public class UserController {
     }
 
     @DeleteMapping("/v1/backstage/users")
-    public String deleteOneUser(@RequestParam("id") String user_id, HttpServletRequest httpRequest) throws ParseException {
+    @ApiOperation(value = "删除用户", notes = "删除单个用户信息")
+    public String deleteOneUser(@ApiParam(name = "id", value = "用户的完整id", required = true) @RequestParam("id") String user_id, HttpServletRequest httpRequest) throws ParseException {
         HttpSession httpSession = httpRequest.getSession();
         Log this_log = new Log();
         this_log.setAction("删除");
@@ -54,7 +61,10 @@ public class UserController {
     }
 
     @PutMapping("/v1/backstage/users")
-    public User putOneUser(@RequestParam("id") String uid, @RequestParam("operation") String op, HttpServletRequest httpRequest) throws ParseException {
+    @ApiOperation(value = "更改用户状态", notes = "更改单个用户的状态信息")
+    public User putOneUser(@ApiParam(name = "id", value = "用户的完整id", required = true) @RequestParam("id") String uid,
+                           @ApiParam(name = "operation", value = "状态的变更，可选“freeze”或“recover”", required = true) @RequestParam("operation") String op,
+                           HttpServletRequest httpRequest) throws ParseException {
         User cur_user = userService.findById(uid);
         if (cur_user == null)
             return null;
