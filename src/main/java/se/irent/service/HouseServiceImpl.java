@@ -18,12 +18,12 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
-    public List<House> findByIdLike(String hid) {
+    public List<House> findByIdLike(int hid) {
         return houseRepository.findByIdLike("%" + hid + "%");
     }
 
     @Override
-    public void deleteById(String hid) {
+    public void deleteById(int hid) {
         houseRepository.deleteById(hid);
     }
 }

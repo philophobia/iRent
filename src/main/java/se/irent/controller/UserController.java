@@ -32,8 +32,10 @@ public class UserController {
     public List<User> getUser(@ApiParam(name = "id", value = "用户的部分或完整id", required = false) @RequestParam(value = "id", required = false) String uid) {
         if (uid == null)
             return userService.findAll();
-        else
-            return userService.findByIdLike(uid);
+        else {
+            int id = Integer.parseInt(uid);
+            return userService.findByIdLike(id);
+        }
     }
 
     @DeleteMapping("/v1/backstage/users")
@@ -51,7 +53,8 @@ public class UserController {
         this_log.setTime(time);
 
         if (this_log.getOperator_id() != null) {
-            userService.deleteById(user_id);
+            int id = Integer.parseInt(user_id);
+            userService.deleteById(id);
             logService.addLog(this_log);
             return "succeeded";
         }
@@ -60,12 +63,13 @@ public class UserController {
         }
     }
 
-    @PutMapping("/v1/backstage/users")
+    /*@PutMapping("/v1/backstage/users")
     @ApiOperation(value = "更改用户状态", notes = "更改单个用户的状态信息")
     public User putOneUser(@ApiParam(name = "id", value = "用户的完整id", required = true) @RequestParam("id") String uid,
                            @ApiParam(name = "operation", value = "状态的变更，可选“freeze”或“recover”", required = true) @RequestParam("operation") String op,
                            HttpServletRequest httpRequest) throws ParseException {
-        User cur_user = userService.findById(uid);
+        int id = Integer.parseInt(uid);
+        User cur_user = userService.findById(id);
         if (cur_user == null)
             return null;
         String p = "";
@@ -98,5 +102,5 @@ public class UserController {
         else {
             return null;
         }
-    }
+    }*/
 }

@@ -31,8 +31,10 @@ public class HouseController {
     public List<House> getHouse(@ApiParam(name = "id", value = "房源的部分或完整id", required = false) @RequestParam(value = "id", required = false) String hid) {
         if (hid == null)
             return houseService.findAll();
-        else
-            return houseService.findByIdLike(hid);
+        else {
+            int id = Integer.parseInt(hid);
+            return houseService.findByIdLike(id);
+        }
     }
 
     @DeleteMapping("/v1/backstage/houses")
@@ -51,7 +53,8 @@ public class HouseController {
         this_log.setTime(time);
 
         if (this_log.getOperator_id() != null) {
-            houseService.deleteById(hid);
+            int id = Integer.parseInt(hid);
+            houseService.deleteById(id);
             logService.addLog(this_log);
             return "succeeded";
         }

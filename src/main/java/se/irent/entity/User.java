@@ -1,65 +1,59 @@
 package se.irent.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class User {
     @Id
-    private String id;
-    private String password;
-    private String nickname;
-    private String telephone;
-    private String permission_level;
-    private boolean real_name_status;
-    private String account_status;
+    @GeneratedValue
+    private int u_id;
+    private String u_password;
+    private String u_nickname;
+    private String u_phone_number;
+    private String u_name;
+    //private String account_status;
 
-    public String getId() {
-        return id;
+    public int getU_id() {
+        return u_id;
     }
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
+    public void setU_id(int u_id) {
+        this.u_id = u_id;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getU_password() {
+        return u_password;
     }
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
+    public void setU_password(String u_password) {
+        this.u_password = u_password;
     }
 
-    public String getPermission_level() {
-        return permission_level;
+    public String getU_nickname() {
+        return u_nickname;
     }
-    public void setPermission_level(String permission_level) {
-        this.permission_level = permission_level;
-    }
-
-    public boolean isReal_name_status() {
-        return real_name_status;
-    }
-    public void setReal_name_status(boolean real_name_status) {
-        this.real_name_status = real_name_status;
+    public void setU_nickname(String u_nickname) {
+        this.u_nickname = u_nickname;
     }
 
-    public String getAccount_status() {
+    public String getU_phone_number() {
+        return u_phone_number;
+    }
+    public void setU_phone_number(String u_phone_number) {
+        this.u_phone_number = u_phone_number;
+    }
+
+    public String getU_name() {
+        return u_name;
+    }
+    public void setU_name(String u_name) {
+        this.u_name = u_name;
+    }
+
+    /*public String getAccount_status() {
         return account_status;
     }
     public void setAccount_status(String account_status) {
         this.account_status = account_status;
-    }
+    }*/
 }

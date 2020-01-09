@@ -1,43 +1,55 @@
 package se.irent.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 public class Report {
     @Id
-    private String id;
-    private String complainant_id;
-    private String being_reported_id;
-    private String reason;
+    @GeneratedValue
+    private int r_id;
+    private int h_id;
+    private int u_id;
+    private String report_user;
+    private String report_reason;
     private String status;
+    private Date report_time;
 
-    public String getId() {
-        return id;
+    public int getR_id() {
+        return r_id;
     }
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getComplainant_id() {
-        return complainant_id;
-    }
-    public void setComplainant_id(String complainant_id) {
-        this.complainant_id = complainant_id;
+    public void setR_id(int r_id) {
+        this.r_id = r_id;
     }
 
-    public String getBeing_reported_id() {
-        return being_reported_id;
+    public int getH_id() {
+        return h_id;
     }
-    public void setBeing_reported_id(String being_reported_id) {
-        this.being_reported_id = being_reported_id;
+    public void setH_id(int h_id) {
+        this.h_id = h_id;
     }
 
-    public String getReason() {
-        return reason;
+    public int getU_id() {
+        return u_id;
     }
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setU_id(int u_id) {
+        this.u_id = u_id;
+    }
+
+    public String getReport_user() {
+        return report_user;
+    }
+    public void setReport_user(String report_user) {
+        this.report_user = report_user;
+    }
+
+    public String getReport_reason() {
+        return report_reason;
+    }
+    public void setReport_reason(String report_reason) {
+        this.report_reason = report_reason;
     }
 
     public String getStatus() {
@@ -45,5 +57,12 @@ public class Report {
     }
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Date getReport_time() {
+        return report_time;
+    }
+    public void setReport_time(Date report_time) {
+        this.report_time = report_time;
     }
 }

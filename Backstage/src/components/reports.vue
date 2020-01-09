@@ -21,10 +21,11 @@
     </el-form>
     <!--表格区域-->
     <el-table :data="tableData" height="100%" style="width: 100%" v-loading="loading">
-      <el-table-column prop="id" label="举报信编号" sortable></el-table-column>
-      <el-table-column prop="complainant_id" label="举报人编号" sortable></el-table-column>
-      <el-table-column prop="being_reported_id" label="被举报房源编号" sortable></el-table-column>
-      <el-table-column prop="reason" label="举报理由"></el-table-column>
+      <el-table-column prop="r_id" label="举报信编号" sortable></el-table-column>
+      <el-table-column prop="u_id" label="举报人编号" sortable></el-table-column>
+      <el-table-column prop="h_id" label="被举报房源编号" sortable></el-table-column>
+      <el-table-column prop="report_reason" label="举报理由"></el-table-column>
+      <el-table-column prop="report_time" label="举报时间" :formatter="toDescription"></el-table-column>
       <el-table-column prop="status" label="状态"></el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
@@ -52,6 +53,7 @@
 
 <script>
 import api from "../apis";
+import moment from 'moment'
 export default {
   inject: ['reload'],
   data() {
@@ -81,15 +83,20 @@ export default {
   },
   methods: {
     handleHandle(row) {
-      if (row.status == "正在处理") {
+      if (row.status == "待处理"){
+        this.isINGDisable = false;
+        this.isEDDisable = true;
+      }
+      else if (row.status == "正在处理") {
         this.isINGDisable = true;
+        this.isEDDisable = false;
       }
       else if (row.status == "处理完成") {
         this.isINGDisable = true;
         this.isEDDisable = true;
       }
       this.isDialogVisible = true;
-      this.alteration.rid = row.id;
+      this.alteration.rid = row.r_id;
     },
     handleConfirm() {
       this.isDialogVisible = false;
@@ -127,6 +134,10 @@ export default {
         }).catch(error => {
           console.log(error);
         });
+    },
+    toDescription(row, column) {
+      let value = row.report_time;
+      return moment(value).format("YYYY-MM-DD HH:mm:ss");
     }
   }
 };

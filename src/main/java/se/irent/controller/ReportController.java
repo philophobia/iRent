@@ -46,8 +46,10 @@ public class ReportController {
                 }
                 return reportService.findByStatus(stat);
             }
-        else
-            return reportService.findByIdLike(rid);
+        else {
+            int id = Integer.parseInt(rid);
+            return reportService.findByIdLike(id);
+        }
     }
 
     @PutMapping("/v1/backstage/reports")
@@ -55,7 +57,8 @@ public class ReportController {
     public Report updateReport(@ApiParam(name = "id", value = "举报的完整id", required = true) @RequestParam("id") String rid,
                                @ApiParam(name = "status", value = "变更的状态，可选“processing”或“processed”", required = true) @RequestParam("status") String stat,
                                HttpServletRequest httpRequest) throws ParseException {
-        Report cur_report = reportService.findById(rid);
+        int id = Integer.parseInt(rid);
+        Report cur_report = reportService.findById(id);
         if (cur_report == null)
             return null;
         switch (stat) {

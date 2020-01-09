@@ -15,12 +15,6 @@ export default {
     searchUser: function ({ uid }) {
         return Axios.get('/api/users?id=' + uid);
     },
-    getAllDeals: function () {
-        return Axios.get('/api/deals');
-    },
-    searchDeal: function ({ did }) {
-        return Axios.get('/api/deals?id=' + did);
-    },
     getAllHouses: function () {
         return Axios.get('/api/houses');
     },
@@ -45,9 +39,9 @@ export default {
     searchLogByTime: function ({ start, end }) {
         return Axios.get('/api/logs?start=' + start + "&end=" + end);
     },
-    updateUser: function({ uid, operation}){
+    /*updateUser: function({ uid, operation}){
         return Axios.put('/api/users?id=' + uid + "&operation=" + operation);
-    },
+    },*/
     updateReport: function({ rid, stat }) {
         return Axios.put('/api/reports?id=' + rid + "&status=" + stat);
     },

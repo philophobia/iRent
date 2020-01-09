@@ -4,9 +4,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
-import se.irent.entity.Administrator;
+import se.irent.entity.Admin;
 import se.irent.entity.Log;
-import se.irent.service.AdministratorServiceImpl;
+import se.irent.service.AdminServiceImpl;
 import se.irent.service.LogServiceImpl;
 
 import javax.annotation.Resource;
@@ -21,19 +21,19 @@ import java.util.Date;
 @Api(tags = "登录注销控制器", value = "后台系统管理员的登录注销控制器")
 public class ManagementController {
     @Resource
-    private AdministratorServiceImpl adminService = new AdministratorServiceImpl();
+    private AdminServiceImpl adminService = new AdminServiceImpl();
     @Resource
     private LogServiceImpl logService = new LogServiceImpl();
 
     @GetMapping(value = "/v1/backstage/login")
     @ApiOperation(value = "登录", notes = "允许管理员登录进后台系统")
-    public Administrator login(@ApiParam(name = "id", value = "管理员输入的账号", required = true) @RequestParam("id") String admin_id,
-                               @ApiParam(name = "password", value = "管理员输入的密码", required = true) @RequestParam("password") String pwd,
-                               HttpSession httpSession) throws ParseException {
+    public Admin login(@ApiParam(name = "id", value = "管理员输入的账号", required = true) @RequestParam("id") String admin_id,
+                       @ApiParam(name = "password", value = "管理员输入的密码", required = true) @RequestParam("password") String pwd,
+                       HttpSession httpSession) throws ParseException {
         if (admin_id == null || pwd == null)
             return null;
-        Administrator cur_admin = adminService.findById(admin_id);
-        Administrator re = new Administrator();
+        Admin cur_admin = adminService.findById(admin_id);
+        Admin re = new Admin();
         if (pwd.equals(cur_admin.getPassword())) {
             re.setId(cur_admin.getPassword());
             re.setPassword("***");

@@ -19,12 +19,12 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<Report> findByIdLike(String param_id) {
-        return reportRepository.findByIdLike("%" + param_id + "%");
+    public List<Report> findByIdLike(int rid) {
+        return reportRepository.findByIdLike("%" + rid + "%");
     }
 
     @Override
-    public Report findById(String rid) {
+    public Report findById(int rid) {
         Optional<Report> cur = reportRepository.findById(rid);
         return cur.orElse(null);
     }

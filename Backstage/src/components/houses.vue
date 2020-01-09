@@ -11,13 +11,15 @@
     </el-form>
     <!--表格区域-->
     <el-table :data="tableData" height="100%" style="width: 100%" v-loading="loading">
-      <el-table-column prop="id" label="编号"></el-table-column>
-      <el-table-column prop="owner_id" label="房主编号"></el-table-column>
-      <el-table-column prop="address" label="地址"></el-table-column>
-      <el-table-column prop="status" label="状态" :formatter="toDescription"></el-table-column>
-      <el-table-column prop="price" label="价格"></el-table-column>
+      <el-table-column prop="h_id" label="编号"></el-table-column>
+      <el-table-column prop="house_address" label="地址"></el-table-column>
+      <el-table-column prop="house_price" label="价格"></el-table-column>
+      <el-table-column prop="house_type" label="类型"></el-table-column>
+      <el-table-column prop="publisher" label="发布者"></el-table-column>
+      <el-table-column prop="publish_time" label="发布时间" :formatter="toDescription"></el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
+          <el-button @click="handleJump(scope.row)" type="text" size="small">详情</el-button>
           <el-button @click="handleConfirm(scope.row)" type="text" size="small">删除</el-button>
         </template>
       </el-table-column>
@@ -27,6 +29,7 @@
 
 <script>
 import api from "../apis";
+import moment from 'moment'
 export default {
   inject: ['reload'],
   data() {
@@ -35,7 +38,8 @@ export default {
       formSearch: {
         hid: ''
       },
-      loading: false
+      loading: false,
+      houseDetailBase: 'http://localhost:8090/v1/house?id='
     };
   },
   mounted() {
@@ -57,6 +61,9 @@ export default {
           console.log(error);
         });
     },
+    handleJump(row) {
+      window.open(this.houseDetailBase + row.h_id);
+    },
     handleConfirm(row) {
         this.$confirm('此操作将不可恢复, 是否继续？', '提示', {
           confirmButtonText: '确定',
@@ -74,7 +81,7 @@ export default {
     handleDelete(row) {
       this.loading = true;
       let params = {
-        hid: row.id
+        hid: row.h_id
       };
       api.deleteHouse(params)
         .then(response => {
@@ -97,13 +104,8 @@ export default {
         });
     },
     toDescription(row, column) {
-      let value = row.status;
-      if (value == false) {
-        return "未出租";
-      }
-      else {
-        return "已出租";
-      }
+      let value = row.publish_time;
+        return moment(value).format("YYYY-MM-DD HH:mm:ss");
     }
   }
 };

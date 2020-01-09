@@ -6,6 +6,6 @@ import java.util.List;
 
 interface HouseService {
     List<House> findAll();
-    List<House> findByIdLike(String hid);
-    void deleteById(String hid);
+    List<House> findByIdLike(int hid);
+    void deleteById(int hid);
 }

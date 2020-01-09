@@ -46,10 +46,6 @@ const router = new Router({
         component: resolve => require(['../components/users'], resolve)
       },
       {
-        path: '/deals',
-        component: resolve => require(['../components/deals'], resolve)
-      },
-      {
         path: '/reports',
         component: resolve => require(['../components/reports'], resolve)
       },

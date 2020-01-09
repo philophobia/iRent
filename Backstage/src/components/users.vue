@@ -11,15 +11,16 @@
     </el-form>
     <!--表格区域-->
     <el-table :data="tableData" height="100%" style="width: 100%" v-loading="loading">
-      <el-table-column prop="id" label="用户编号" sortable></el-table-column>
-      <el-table-column prop="nickname" label="昵称"></el-table-column>
-      <el-table-column prop="telephone" label="电话号码" sortable></el-table-column>
-      <el-table-column prop="permission_level" label="角色"></el-table-column>
-      <el-table-column prop="account_status" label="账号状态"></el-table-column>
+      <el-table-column prop="u_id" label="用户编号" sortable></el-table-column>
+      <el-table-column prop="u_nickname" label="昵称"></el-table-column>
+      <el-table-column prop="u_phone_number" label="电话号码" sortable></el-table-column>
+      <!--<el-table-column prop="account_status" label="账号状态"></el-table-column>-->
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
+          <!--
           <el-button @click="handleFreeze(scope.row)" type="text" size="small">冻结</el-button>
           <el-button @click="handleRecover(scope.row)" type="text" size="small">恢复</el-button>
+        -->
           <el-button @click="handleConfirm(scope.row)" type="text" size="small">删除</el-button>
         </template>
       </el-table-column>
@@ -49,7 +50,7 @@
         });
     },
     methods: {
-      handleFreeze(row) {
+      /*handleFreeze(row) {
         this.loading = true;
         let params = {
           id: row.id,
@@ -80,13 +81,12 @@
           }).catch(error => {
             console.log(error);
           });
-      },
+      },*/
       handleSearch() {
         this.loading = true;
         api.searchUser(this.formSearch)
           .then(response => {
             this.loading = false;
-            console.log(response);
             this.tableData = response.data;
           }).catch(error => {
             console.log(error);
@@ -109,7 +109,7 @@
       handleDelete(row) {
         this.loading = true;
         let params = {
-          uid: row.id
+          uid: row.u_id
         };
         api.deleteUser(params)
           .then(response => {

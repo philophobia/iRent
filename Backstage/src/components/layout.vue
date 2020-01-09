@@ -2,7 +2,7 @@
     <el-container>
         <el-header>
             <el-menu mode="horizontal" style="width: auto;margin: 0;padding: 0;" background-color="#3e3281" text-color="#fff" active-text-color="#ffd-4b">
-                <img src="../assets/house-white.png" style="height: auto;width: 55px;" @click="goIndexPage">
+                <img src="../assets/house-white.png" style="height: 54px;width: auto;" @click="goIndexPage">
                 <el-submenu style="float: right;" index="s">
                     <template slot="title">{{ admin }}<icon class="el-icon-setting"></icon></template>
                     <el-menu-item index="o" @click="exit"><icon class="el-icon-remove-outline"></icon>退出</el-menu-item>
@@ -15,9 +15,8 @@
                     <el-menu-itme index="0" @click="handleCollapse" style="cursor: pointer;"><icon class="el-icon-menu"></icon></el-menu-itme>
                     <el-menu-item index="1" @click="goUserPage"><icon class="el-icon-user"></icon><span slot="title">用户一览</span></el-menu-item>
                     <el-menu-item index="2" @click="goHousePage"><icon class="el-icon-office-building"></icon><span slot="title">房源一览</span></el-menu-item>
-                    <el-menu-item index="3" @click="goDealPage"><icon class="el-icon-goods"></icon><span slot="title">交易一览</span></el-menu-item>
-                    <el-menu-item index="4" @click="goReportPage"><icon class="el-icon-edit-outline"></icon><span slot="title">举报一览</span></el-menu-item>
-                    <el-menu-item index="5" @click="goLogPage"><icon class="el-icon-document"></icon><span slot="title">操作记录</span></el-menu-item>
+                    <el-menu-item index="3" @click="goReportPage"><icon class="el-icon-edit-outline"></icon><span slot="title">举报一览</span></el-menu-item>
+                    <el-menu-item index="4" @click="goLogPage"><icon class="el-icon-document"></icon><span slot="title">操作记录</span></el-menu-item>
                 </el-menu>
             </el-aside>
             <el-main width="auto">
