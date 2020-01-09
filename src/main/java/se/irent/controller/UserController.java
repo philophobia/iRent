@@ -63,7 +63,7 @@ public class UserController {
         }
     }
 
-    /*@PutMapping("/v1/backstage/users")
+    @PutMapping("/v1/backstage/users")
     @ApiOperation(value = "更改用户状态", notes = "更改单个用户的状态信息")
     public User putOneUser(@ApiParam(name = "id", value = "用户的完整id", required = true) @RequestParam("id") String uid,
                            @ApiParam(name = "operation", value = "状态的变更，可选“freeze”或“recover”", required = true) @RequestParam("operation") String op,
@@ -102,5 +102,5 @@ public class UserController {
         else {
             return null;
         }
-    }*/
+    }
 }

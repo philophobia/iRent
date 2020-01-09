@@ -1,5 +1,7 @@
 package se.irent.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,6 +16,7 @@ public class Log {
     private String action;
     private String target_kind;
     private String target_id;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
 
     public int getId() {

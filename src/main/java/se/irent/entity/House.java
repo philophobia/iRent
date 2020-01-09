@@ -1,5 +1,7 @@
 package se.irent.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,6 +25,7 @@ public class House {
     private String house_oriented;
     private String house_detailes_img;
     private String publisher;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date publish_time;
 
     public int getH_id() {

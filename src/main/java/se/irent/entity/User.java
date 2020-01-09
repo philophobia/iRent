@@ -13,7 +13,7 @@ public class User {
     private String u_nickname;
     private String u_phone_number;
     private String u_name;
-    //private String account_status;
+    private String account_status;
 
     public int getU_id() {
         return u_id;
@@ -50,10 +50,10 @@ public class User {
         this.u_name = u_name;
     }
 
-    /*public String getAccount_status() {
+    public String getAccount_status() {
         return account_status;
     }
     public void setAccount_status(String account_status) {
         this.account_status = account_status;
-    }*/
+    }
 }

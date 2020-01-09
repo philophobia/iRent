@@ -9,5 +9,5 @@ interface UserService {
     List<User> findAll();
     User findById(int user_id);
     void deleteById(int user_id);
-    //User update(User user);
+    User update(User user);
 }

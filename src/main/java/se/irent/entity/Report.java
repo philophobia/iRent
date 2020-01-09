@@ -1,5 +1,7 @@
 package se.irent.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,6 +17,7 @@ public class Report {
     private String report_user;
     private String report_reason;
     private String status;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date report_time;
 
     public int getR_id() {
